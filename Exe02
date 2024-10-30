@@ -1,0 +1,59 @@
+# Imagine que estamos desenvolvendo um aplicativo de edição de texto. Os usuários podem digitar, copiar, colar e desfazer ações.
+# Para implementar a funcionalidade de “desfazer” (undo), podemos usar uma estrutura de dados.
+# Qual estrutura de dados poderia se utilizada neste cenário? Justifique sua resposta.
+# Apresente uma proposta de implementação.
+
+class Node:
+    def __init__(self, data=None, node_previous=None):
+        self.data = data
+        self.previous = node_previous
+
+    def __repr__(self):
+        return '%s . %s' % (self.data, self.previous)
+
+
+class Stack:
+    def __init__(self):
+        self.top = None
+
+    def __repr__(self):
+        return "[" + str(self.top) + "]"
+
+    def insert(self):
+        new_node = Node(input("Type your text:"))
+        new_node.previous = self.top
+        self.top = new_node
+
+    def copy(self):
+        if self.top != None:
+            self.copied_text = self.top.data
+            print(f'Text copied: {self.copied_text}')
+        else:
+            print("There's nothing to copy!")
+
+    def paste(self):
+        if self.copied_text:
+            new_node = Node(self.copied_text, self.top)
+            self.top = new_node
+        else:
+            print("There's nothing to paste!")
+
+    def undo(self):
+        assert self.top, "You cant undo when nothing was written"
+        self.top = self.top.previous
+
+new_stack = Stack()
+while True:
+    choice = int(input('Choose an option: [1] to write a text, [2] to copy, [3] to paste, [4] to undo or [5] to see the history'))
+    if choice == 1:
+        new_stack.insert()
+    elif choice == 2:
+        new_stack.copy()
+    elif choice == 3:
+        new_stack.paste()
+    elif choice == 4:
+        new_stack.undo()
+    elif choice == 5:
+        print(new_stack)
+    else:
+        print("Invalid option. Try again.")
