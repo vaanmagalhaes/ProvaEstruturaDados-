@@ -1,0 +1,64 @@
+class Node:
+    def __init__(self, task_name):
+        self.task_name = task_name 
+        self.subtasks = [] 
+        self.next = None
+
+    def __repr__(self):
+        return f'Task: {self.name}, Subtask: {self.subtask}'
+
+class NodeSub:
+    def __init__(self, name):
+        self.name = name
+        self.completed = False
+
+    def __repr__(self):
+        status = "Completed" if self.completed else "Incomplete"
+        return f'Subtask: {self.name}, Status: {status}'
+
+class NewQueue:
+    def __init__(self):
+        self.start = None
+        self.end = None
+        
+    def insert_task(self, task_name, num_subtasks):
+        new_task = Node(task_name) 
+        subtask_name = input('Name your subtask:')
+        new_task.subtasks.append(Subtask(subtask_name))
+       
+ 		if self.start == None:
+               self.start = new_task
+               self.end = new_task
+ 		else:
+               self.end.next = new_task
+               self.end = new_task
+
+     def process_task(self):
+        if self.start == None:
+            print("No tasks to process.")
+            return current_task = self.start
+        print(f'Processing task: {current_task.task_name}')
+
+        for subtask in current_task.subtasks:
+            completed = input(f'Is the subtask "{subtask.name}" completed? (Y/N): ').strip().upper()
+            subtask.completed = (completed == 'Y')
+            
+        self.start = self.start.next
+        if self.start == None:
+            self.end = None
+            print(f'Task "{current_task.task_name}" completed.')
+            
+task_queue = TaskQueue()
+
+while True:
+    choice = print("Choose an option: [1] Add a task or [2] Process a task")
+
+    if choice == '1':
+        task_name = input("Task name: ")
+        num_subtasks = int(input(f"How many subtasks for '{task_name}'? "))
+        task_queue.add_task(task_name, num_subtasks)
+    elif choice == '2':
+        task_queue.process_task()
+        break
+    else:
+        print("Invalid option. Try again.")
